@@ -57,9 +57,9 @@ function Manageusers() {
 
   return (
     <div className='mr-28'>
-      <h1 className='text-3xl font-medium mr-24'><center><b>Employee Management</b></center></h1><br /><br />
-      <input type="search" className='border-solid border-black p-2' placeholder='Search Employee'/><br /><br />
-      <table className="table-auto border-collapse border border-gray-400">
+      <h1 className='text-3xl font-semibold mr-24 ml-60 mt-5 p-8'><center>Employee Management</center></h1><br /><br />
+      <input type="search" className=' border p-2 ml-7' placeholder='Search Employee'/><br /><br />
+      <table className="table-auto border-collapse border border-gray-400 ml-7">
         <thead>
           <tr>
             <th className="border border-gray-300 px-4 py-2 w-72 font-medium"><b>Employee Name</b></th>

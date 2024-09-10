@@ -9,7 +9,7 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = (email, password) => {
-    if (email === "test@example.com" && password === "password123") {
+    if (email === "admin@gmail.com" && password === "admin123") {
       setIsAuthenticated(true);
     } else {
       alert("Invalid credentials!");

@@ -18,7 +18,7 @@ const Sidebar = ({ children }) => {
 
   return (
     <div className="flex">
-      <div className="flex flex-col fixed top-0 left-0 h-screen w-64 bg-blue-900 text-white p-5">
+      <div className="flex flex-col fixed top-0 left-0 h-screen w-64 bg-blue-900 text-white p-5 font-medium">
         <img src="/LogoRed.png" alt="Logo" />
         <nav>
           <ul className="space-y-4">
@@ -27,7 +27,7 @@ const Sidebar = ({ children }) => {
                 <button
                   onClick={() => handleNavigation(item.path, index)}
                   className={`flex items-center text-left p-2 rounded-md transition-colors duration-200 ${
-                    activeIndex === index ? "bg-gray-800" : "hover:bg-gray-800"
+                    activeIndex === index ? "bg-white text-blue-900" : "hover:bg-white text-white hover:text-blue-900"
                   }`}
                 >
                   {item.icon}
