@@ -14,13 +14,13 @@ function Manageusers() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/user'); // Replace with your actual API URL
+        const response = await axios.get('http://localhost:8000/user');
         console.log(response.data.data)
         setEmployees(response.data.data);
-        setLoading(false); // Data loaded, stop showing loader
+        setLoading(false); 
       } catch (error) {
         console.error("Error fetching employee data:", error);
-        setLoading(false); // Even if there's an error, stop showing loader
+        setLoading(false); 
       }
     };
 

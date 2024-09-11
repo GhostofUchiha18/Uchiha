@@ -6,7 +6,7 @@ import Manageusers from "./components/Manageusers";
 import LoginPage from "./components/Loginpage";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const handleLogin = (email, password) => {
     if (email === "admin@gmail.com" && password === "admin123") {
