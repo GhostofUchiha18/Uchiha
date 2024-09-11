@@ -1,38 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Details from './Details';
 import Edit from './Edit';
+import axios from "axios";
 
 function Manageusers() {
-  const [employees, setEmployees] = useState([
-    {
-      name: 'Shikshya Neupane',
-      email: 'shikshya@example.com',
-      phone: '+1234567890',
-      department: 'Mentors',
-    },
-    {
-      name: 'Ujjwal Sah',
-      email: 'ujjwal@example.com',
-      phone: '+0987654321',
-      department: 'Mentors',
-    },
-    {
-      name: 'Garima Bhattrai',
-      email: 'garima@example.com',
-      phone: '+123454321',
-      department: 'Mentors',
-    },
-    {
-      name: 'Srijan Napit',
-      email: 'srijan@example.com',
-      phone: '+0987656789',
-      department: 'Coding',
-    },
-  ]);
-
+  const [employees, setEmployees] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [dialogType, setDialogType] = useState(''); 
+  const [loading, setLoading] = useState(true); 
+
+  // Fetch employee data from the API
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/user'); // Replace with your actual API URL
+        console.log(response.data.data)
+        setEmployees(response.data.data);
+        setLoading(false); // Data loaded, stop showing loader
+      } catch (error) {
+        console.error("Error fetching employee data:", error);
+        setLoading(false); // Even if there's an error, stop showing loader
+      }
+    };
+
+    fetchEmployees();
+  }, []);
 
   const openDialog = (employee, type) => {
     setSelectedEmployee(employee);
@@ -46,24 +39,31 @@ function Manageusers() {
     setDialogType('');
   };
 
+  
   const handleSave = (updatedEmployee) => {
+  
+  
     setEmployees((prevEmployees) => 
       prevEmployees.map((employee) => 
         employee.email === updatedEmployee.email ? updatedEmployee : employee
+
       )
     );
     closeDialog();
   };
 
+  if (loading) {
+    return <div className="text-center mt-10">Loading employees...</div>;
+  }
+
   return (
     <div className='mr-28'>
       <h1 className='text-3xl font-semibold mr-24 ml-60 mt-5 p-8'><center>Employee Management</center></h1><br /><br />
-      <input type="search" className=' border p-2 ml-7' placeholder='Search Employee'/><br /><br />
-      <table className="table-auto border-collapse border border-gray-400 ml-7">
+      <table className="table-auto border-collapse border border- ml-7">
         <thead>
-          <tr>
+          <tr className='bg-gray-300'>
             <th className="border border-gray-300 px-4 py-2 w-72 font-medium"><b>Employee Name</b></th>
-            <th className="border border-gray-300 px-4 py-2 w-72 font-medium"><b>Department</b></th>
+            <th className="border border-gray-300 px-4 py-2 w-72 font-medium"><b>Email</b></th>
             <th className="border border-gray-300 px-4 py-2 w-96 font-medium"><b>Actions</b></th>
           </tr>
         </thead>
@@ -71,15 +71,14 @@ function Manageusers() {
           {employees.map((employee, index) => (
             <tr key={index}>
               <td className="border border-gray-300 px-4 py-2">{employee.name}</td>
-              <td className="border border-gray-300 px-4 py-2"><center>{employee.department}</center></td>
+              <td className="border border-gray-300 px-4 py-2"><center>{employee.email}</center></td>
               <td className="border border-gray-300 px-4 py-2"><center>
-                <button className='bg-blue-600 rounded-md text-white p-1 w-24 mr-4' onClick={() => openDialog(employee, 'details')}>Details</button>
-                <button className='bg-blue-600 rounded-md text-white p-1 w-24 ml-4' onClick={() => openDialog(employee, 'edit')}>Edit</button></center></td>
+                <button className=' rounded-md text-blue-600 p-1 w-24 mr-4 font-semibold' onClick={() => openDialog(employee, 'details')}>Details</button>
+                <button className=' rounded-md text-blue-600 p-1 w-24 ml-4 underline font-semibold' onClick={() => openDialog(employee, 'edit')}>Edit</button></center></td>
             </tr>
           ))}
         </tbody>
       </table>
-
 
       {isDialogOpen && selectedEmployee && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
