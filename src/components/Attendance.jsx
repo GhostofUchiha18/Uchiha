@@ -119,7 +119,7 @@ function Attendance() {
       <center>
         <button
           onClick={handleSubmit}
-          className="bg-blue-500 p-2 rounded-md text-white mt-[40px]"
+          className="bg-blue-500 p-2 rounded-md text-white ml-[950px] mt-[40px]"
         >
           Submit
         </button>

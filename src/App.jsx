@@ -6,14 +6,18 @@ import Manageusers from "./components/Manageusers";
 import LoginPage from "./components/Loginpage";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = (email, password) => {
-    if (email === "admin@gmail.com" && password === "admin123") {
+    if (email === "admin@gmail.com" && password === "admin1234567890") {
       setIsAuthenticated(true);
     } else {
       alert("Invalid credentials!");
     }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
   };
 
   return (
@@ -21,7 +25,7 @@ const App = () => {
       <div className="min-h-screen flex">
         {isAuthenticated ? (
           <>
-            <Sidebar>
+            <Sidebar onLogout={handleLogout}>
               <div className="ml-64 flex-grow">
                 <Routes>
                   <Route path="/" element={<Navigate to="/attendance" />} />

@@ -2,25 +2,25 @@ import React, { useState, useEffect } from 'react';
 import Details from './Details';
 import Edit from './Edit';
 import axios from "axios";
+import { Plus } from 'lucide-react';
 
 function Manageusers() {
   const [employees, setEmployees] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [dialogType, setDialogType] = useState(''); 
-  const [loading, setLoading] = useState(true); 
+  const [dialogType, setDialogType] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [newEmployee, setNewEmployee] = useState({ name: '', email: '', phone: '', department: '' });
 
-  // Fetch employee data from the API
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
         const response = await axios.get('http://localhost:8000/user');
-        console.log(response.data.data)
         setEmployees(response.data.data);
-        setLoading(false); 
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching employee data:", error);
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -28,7 +28,12 @@ function Manageusers() {
   }, []);
 
   const openDialog = (employee, type) => {
-    setSelectedEmployee(employee);
+    if (type === 'add') {
+      setSelectedEmployee(null);
+      setNewEmployee({ name: '', email: '', phone: '', department: '' });
+    } else {
+      setSelectedEmployee(employee);
+    }
     setDialogType(type);
     setIsDialogOpen(true);
   };
@@ -39,17 +44,63 @@ function Manageusers() {
     setDialogType('');
   };
 
-  
-  const handleSave = (updatedEmployee) => {
-  
-  
-    setEmployees((prevEmployees) => 
-      prevEmployees.map((employee) => 
-        employee.email === updatedEmployee.email ? updatedEmployee : employee
+  const handleSave = async (updatedEmployee) => {
+    try {
+      const payload = {
+        name: updatedEmployee.name,
+        email: updatedEmployee.email,
+        phone: updatedEmployee.phone,
+        department_id: updatedEmployee.department, 
+      };
 
-      )
-    );
-    closeDialog();
+      const response = await axios.put(`http://localhost:8000/user/${updatedEmployee.id}`, payload);
+      console.log('Updated data:', response.data);
+
+      setEmployees((prevEmployees) =>
+        prevEmployees.map((employee) =>
+          employee.id === updatedEmployee.id ? updatedEmployee : employee
+        )
+      );
+      closeDialog();
+    } catch (error) {
+      console.error("Error updating employee data:", error);
+    }
+  };
+
+  const handleAddUser = async () => {
+    try {
+      const payload = {
+        name: newEmployee.name,
+        email: newEmployee.email,
+        phone: newEmployee.phone,
+        department_id: newEmployee.department,
+      };
+
+      const response = await axios.post('http://localhost:8000/user', payload);
+      console.log('Added new user:', response.data);
+
+      setEmployees((prevEmployees) => [...prevEmployees, response.data]);
+      closeDialog();
+    } catch (error) {
+      console.error("Error adding new user:", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000/user/${id}`);
+      console.log('Deleted user:', id);
+
+      setEmployees((prevEmployees) =>
+        prevEmployees.filter((employee) => employee.id !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting employee data:", error);
+    }
+  };
+
+  const handleNewEmployeeChange = (e) => {
+    setNewEmployee({ ...newEmployee, [e.target.name]: e.target.value });
   };
 
   if (loading) {
@@ -73,22 +124,67 @@ function Manageusers() {
               <td className="border border-gray-300 px-4 py-2">{employee.name}</td>
               <td className="border border-gray-300 px-4 py-2"><center>{employee.email}</center></td>
               <td className="border border-gray-300 px-4 py-2"><center>
-                <button className=' rounded-md text-blue-600 p-1 w-24 mr-4 font-semibold' onClick={() => openDialog(employee, 'details')}>Details</button>
-                <button className=' rounded-md text-blue-600 p-1 w-24 ml-4 underline font-semibold' onClick={() => openDialog(employee, 'edit')}>Edit</button></center></td>
+                <button className='rounded-md text-blue-600 p-1 w-24 mr-4 font-semibold' onClick={() => openDialog(employee, 'details')}>Details</button>
+                <button className='rounded-md text-blue-600 p-1 w-24 ml-4 underline font-semibold' onClick={() => openDialog(employee, 'edit')}>Edit</button>
+                <button className='rounded-md text-red-600 p-1 w-24 ml-4 underline font-semibold' onClick={() => handleDelete(employee.id)}>Delete</button>
+              </center></td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {isDialogOpen && selectedEmployee && (
+      {isDialogOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-            {dialogType === 'details' && <Details employee={selectedEmployee} />}
-            {dialogType === 'edit' && <Edit employee={selectedEmployee} onSave={handleSave} />}
+            {dialogType === 'details' && selectedEmployee && <Details employee={selectedEmployee} />}
+            {dialogType === 'edit' && selectedEmployee && <Edit employee={selectedEmployee} onSave={handleSave} />}
+            {dialogType === 'add' && (
+              <div>
+                <h2 className="text-lg font-semibold mb-4">Add New User</h2>
+                <input
+                  className="border border-gray-300 p-2 mb-4 w-full"
+                  placeholder="Name"
+                  name="name"
+                  value={newEmployee.name}
+                  onChange={handleNewEmployeeChange}
+                />
+                <input
+                  className="border border-gray-300 p-2 mb-4 w-full"
+                  placeholder="Email"
+                  name="email"
+                  value={newEmployee.email}
+                  onChange={handleNewEmployeeChange}
+                />
+                <input
+                  className="border border-gray-300 p-2 mb-4 w-full"
+                  placeholder="Phone"
+                  name="phone"
+                  value={newEmployee.phone}
+                  onChange={handleNewEmployeeChange}
+                />
+                <input
+                  className="border border-gray-300 p-2 mb-4 w-full"
+                  placeholder="Department"
+                  name="department"
+                  value={newEmployee.department}
+                  onChange={handleNewEmployeeChange}
+                />
+                <button className="bg-green-500 text-white px-4 py-2 mt-4 rounded" onClick={handleAddUser}>
+                  Save
+                </button>
+              </div>
+            )}
             <button className="bg-red-500 text-white px-4 py-2 mt-4 rounded" onClick={closeDialog}>Close</button>
           </div>
         </div>
+        
       )}
+        <button 
+        className='bg-blue-500 text-white p-3 mb-[100px] rounded-full ml-[950px] mt-16'
+        onClick={() => openDialog(null, 'add')}
+      >
+        <Plus className='h-8 w-8 p-0.5'></Plus>
+      </button>
     </div>
   );
 }

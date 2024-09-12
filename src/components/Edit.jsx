@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Edit = ({ employee, onSave }) => {
   const [formData, setFormData] = useState({
@@ -6,7 +6,18 @@ const Edit = ({ employee, onSave }) => {
     email: employee.email,
     phone: employee.phone,
     department: employee.department,
-  });
+    password: employee.password || '',  // Ensure password is passed or has a default value
+    role: employee.role || 'user',  // Default role if not provided
+});
+
+  useEffect(() => {
+    setFormData({
+      name: employee.name,
+      email: employee.email,
+      phone: employee.phone,
+      department: employee.department,
+    });
+  }, [employee]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,9 +28,11 @@ const Edit = ({ employee, onSave }) => {
   };
 
   const handleSave = () => {
-    console.log('Saving formData:', formData);
-    onSave(formData);
-  };
+    onSave({
+        ...formData,
+        department_id: formData.department,
+    });
+};
 
   return (
     <div>
@@ -56,7 +69,7 @@ const Edit = ({ employee, onSave }) => {
           />
         </div>
         <div>
-          <label className="block">Department:</label>
+          <label className="block">Department ID:</label>
           <input 
             className="border p-2 w-full" 
             type="text" 
