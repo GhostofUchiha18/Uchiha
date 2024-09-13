@@ -51,6 +51,7 @@ function Manageusers() {
         email: updatedEmployee.email,
         phone: updatedEmployee.phone,
         department_id: updatedEmployee.department, 
+        password:updatedEmployee.password,
       };
 
       const response = await axios.put(`http://localhost:8000/user/${updatedEmployee.id}`, payload);
@@ -74,6 +75,7 @@ function Manageusers() {
         email: newEmployee.email,
         phone: newEmployee.phone,
         department_id: newEmployee.department,
+        password: newEmployee.password,
       };
 
       const response = await axios.post('http://localhost:8000/user', payload);
@@ -109,7 +111,7 @@ function Manageusers() {
 
   return (
     <div className='mr-28'>
-      <h1 className='text-3xl font-semibold mr-24 ml-60 mt-5 p-8'><center>Employee Management</center></h1><br /><br />
+      <h1 className='text-3xl font-bold mr-24 ml-60 mt-5 p-8'><center>Employee Management</center></h1><br /><br />
       <table className="table-auto border-collapse border border- ml-7">
         <thead>
           <tr className='bg-gray-300'>
@@ -167,6 +169,13 @@ function Manageusers() {
                   placeholder="Department"
                   name="department"
                   value={newEmployee.department}
+                  onChange={handleNewEmployeeChange}
+                />
+                <input
+                  className="border border-gray-300 p-2 mb-4 w-full"
+                  placeholder="Password"
+                  name="password"
+                  value={newEmployee.password}
                   onChange={handleNewEmployeeChange}
                 />
                 <button className="bg-green-500 text-white px-4 py-2 mt-4 rounded" onClick={handleAddUser}>

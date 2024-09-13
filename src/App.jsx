@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Sidebar from "./components/sidebar";
 import Attendance from "./components/Attendance";
@@ -8,9 +8,18 @@ import LoginPage from "./components/Loginpage";
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  useEffect(() => {
+    // Check localStorage for authentication state on initial load
+    const storedAuth = localStorage.getItem("isAuthenticated");
+    if (storedAuth === "true") {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   const handleLogin = (email, password) => {
     if (email === "admin@gmail.com" && password === "admin1234567890") {
       setIsAuthenticated(true);
+      localStorage.setItem("isAuthenticated", "true"); // Save authentication state
     } else {
       alert("Invalid credentials!");
     }
@@ -18,6 +27,7 @@ const App = () => {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
+    localStorage.removeItem("isAuthenticated"); // Clear authentication state
   };
 
   return (

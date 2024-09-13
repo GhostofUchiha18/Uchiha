@@ -64,7 +64,7 @@ function Attendance() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-semibold text-center">Attendance List</h1>
+      <h1 className="text-3xl font-bold text-center">Attendance List</h1>
       <div className="mt-8">
         <input type="date" className="border p-2 mb-4" />
         <table>
@@ -104,7 +104,7 @@ function Attendance() {
                     value={attendanceData[index]?.status}
                     onChange={(e) => handleInputChange(index, 'status', e.target.value)}
                   >
-                    <option value="" disabled>Select status</option>
+                    <option value="status" disabled selected>Select status</option>
                     <option value="Absent" className="text-red-600">Absent</option>
                     <option value="Present" className="text-green-600">Present</option>
                     <option value="Late" className="text-gray-500">Late</option>
