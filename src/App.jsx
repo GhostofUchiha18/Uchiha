@@ -4,30 +4,43 @@ import Sidebar from "./components/sidebar";
 import Attendance from "./components/Attendance";
 import Manageusers from "./components/Manageusers";
 import LoginPage from "./components/Loginpage";
+import LeaveRequest from "./components/LeaveRequest";
+import axios from "axios";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
-    // Check localStorage for authentication state on initial load
     const storedAuth = localStorage.getItem("isAuthenticated");
     if (storedAuth === "true") {
       setIsAuthenticated(true);
     }
   }, []);
 
-  const handleLogin = (email, password) => {
-    if (email === "admin@gmail.com" && password === "admin1234567890") {
-      setIsAuthenticated(true);
-      localStorage.setItem("isAuthenticated", "true"); // Save authentication state
-    } else {
-      alert("Invalid credentials!");
+  const handleLogin = async (email, password) => {
+    try {
+      const payload = {
+        email,
+        password
+      };
+
+      const response = await axios.post('http://localhost:8000/admin/login', payload);
+
+      if (response.data.success) {
+        setIsAuthenticated(true);
+        localStorage.setItem("isAuthenticated", "true");
+      } else {
+        alert("Invalid credentials!");
+      }
+    } catch (error) {
+      console.error("Error during login", error);
+      alert("Login failed. Please try again.");
     }
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem("isAuthenticated"); // Clear authentication state
+    localStorage.removeItem("isAuthenticated");
   };
 
   return (
@@ -41,6 +54,7 @@ const App = () => {
                   <Route path="/" element={<Navigate to="/attendance" />} />
                   <Route path="/attendance" element={<Attendance />} />
                   <Route path="/users" element={<Manageusers />} />
+                  <Route path="/leave-requests" element={<LeaveRequest />} />
                 </Routes>
               </div>
             </Sidebar>

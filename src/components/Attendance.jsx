@@ -9,7 +9,11 @@ function Attendance() {
     // Fetch employee data from the API
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/user');
+        const response = await axios.get('http://localhost:8000/user', {
+          headers:{
+            'Authorization':`Bearer ${eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTcyNjk4NzI0Nn0.C-SxMY1VET_53Yat2w_smZ2ADDUIy4bHrO-ubCgNqt4}`,
+          }
+        });
         setEmployees(response.data.data);
         setAttendanceData(response.data.data.map(employee => ({
           employeeId: employee.id,
@@ -41,7 +45,7 @@ function Attendance() {
           check_in: data.checkIn,
           check_out: data.checkOut,
           status: data.status,
-          date: new Date().toISOString().split('T')[0], // Or get this value from your date input field
+          date: new Date().toISOString().split('T')[0],
         })),
       };
   
@@ -63,17 +67,19 @@ function Attendance() {
   
 
   return (
+    <body className="bg-[#F5FFFA]">
+      
     <div className="p-8">
-      <h1 className="text-3xl font-bold text-center">Attendance List</h1>
+      <h1 className="text-3xl font-bold text-center text-[#02C46A]">Attendance List</h1>
       <div className="mt-8">
         <input type="date" className="border p-2 mb-4" />
-        <table>
+        <table className="bg-[#E5F9EF]">
           <thead>
-            <tr className="bg-gray-300">
-              <th className="border border-gray-300 px-4 py-2 w-64">Employee Name</th>
-              <th className="border border-gray-300 px-4 py-2 w-64">Check-In</th>
-              <th className="border border-gray-300 px-4 py-2 w-64">Check-Out</th>
-              <th className="border border-gray-300 px-4 py-2 w-64">Action</th>
+            <tr className="bg-[#0EC471]">
+              <th className="px-4 py-2 w-64">Employee Name</th>
+              <th className="px-4 py-2 w-64">Check-In</th>
+              <th className="px-4 py-2 w-64">Check-Out</th>
+              <th className="px-4 py-2 w-64">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -125,6 +131,7 @@ function Attendance() {
         </button>
       </center>
     </div>
+    </body>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NotepadText, UserCog, LogOut } from "lucide-react"; // Add LogOut icon
+import { NotepadText, UserCog, LogOut, ClipboardList } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ children, onLogout }) => {
@@ -9,12 +9,13 @@ const Sidebar = ({ children, onLogout }) => {
   const menuItems = [
     { name: "Attendance", path: "/attendance", icon: <NotepadText /> },
     { name: "Users", path: "/users", icon: <UserCog /> },
-    { name: "Logout", path: "/logout", icon: <LogOut /> }, // Add Logout option
+    { name: "Leave Requests", path: "/leave-requests", icon: <ClipboardList /> },
+    { name: "Logout", path: "/logout", icon: <LogOut /> },
   ];
 
   const handleNavigation = (item, index) => {
     if (item.name === "Logout") {
-      onLogout(); // Call the logout handler when Logout is clicked
+      onLogout(); 
     } else {
       navigate(item.path);
       setActiveIndex(index);
@@ -23,16 +24,16 @@ const Sidebar = ({ children, onLogout }) => {
 
   return (
     <div className="flex">
-      <div className="flex flex-col fixed top-0 left-0 h-screen w-64 bg-blue-900 text-white font-medium border-white">
-        <img src="/LogoRed.png" alt="Logo" />
+      <div className="flex flex-col fixed top-0 left-0 h-screen w-64 bg-[#59C9A5] text-[#CAD4D0] font-semibold text-xl">
+        <img src="/digitalhorizon.png" alt="Logo" />
         <nav>
           <ul className="space-y-4">
             {menuItems.map((item, index) => (
               <li key={index}>
                 <button
                   onClick={() => handleNavigation(item, index)}
-                  className={`flex items-center text-left p-2 transition-colors duration-200 ${
-                    activeIndex === index ? "bg-white text-blue-900 w-full" : ""
+                  className={`flex items-center text-left p-2 border-none transition-colors duration-200 ${
+                    activeIndex === index ? "bg-[#F5FFFA] text-black w-full rounded-s-sm" : ""
                   }`}
                 >
                   {item.icon}
