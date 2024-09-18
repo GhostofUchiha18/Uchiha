@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import axios from "axios";
 
-const LoginPage = ({ onLogin }) => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    onLogin(email, password);
+    const response = await axios.post("https//:localhost:8000/login", {email, password})
+    console.log(response.data)
   };
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center justify-center">
       <div className="flex flex-col items-center lg:items-start bg-white lg:p-16 top-0 left-0 h-screen bg-[url('./offi.webp')] bg-cover">
@@ -22,7 +25,7 @@ const LoginPage = ({ onLogin }) => {
             <input
               type="email"
               value={email}
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e)=> setEmail(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-500"
               placeholder="Enter your email"
               required

@@ -36,7 +36,7 @@ const App = () => {
             </Sidebar>
           </>
         ) : (
-          <LoginPage onLogin={handleLogin} />
+          <LoginPage  />
         )}
       </div>
     </Router>
