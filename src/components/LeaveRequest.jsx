@@ -38,27 +38,26 @@ const LeaveRequest = () => {
   }
 
   return (
-    <body className='bg-[#F5FFFA]'>
-            <div className='p-8'>
-      <h1 className='text-3xl font-bold mb-6 text-[#02C46A]'>Leave Requests</h1>
-      <table className="table-auto bg-white w-full">
-        <thead>
-          <tr className='bg-[#02C46A] text-black'>
-            <th className="px-4 py-2 w-96">Employee Name</th>
-            <th className="px-4 py-2 w-56">Leave Date</th>
-            <th className="px-4 py-2 w-56">Duration</th>
-            <th className="px-4 py-2 w-[1000px]">Reason</th>
-            <th className="px-4 py-2 w-56">Status</th>
+    <div className="bg-[#F5FFFA] p-8">
+      <h1 className="text-3xl font-bold mb-6 text-[#02C46A]">Leave Requests</h1>
+      <table className="bg-[#E5F9EF] w-full">
+        <thead className="bg-[#02C46A]">
+          <tr>
+            <th className="px-4 py-2">Employee Name</th>
+            <th className="px-4 py-2">Leave Date</th>
+            <th className="px-4 py-2">Duration</th>
+            <th className="px-4 py-2">Reason</th>
+            <th className="px-4 py-2">Status</th>
           </tr>
         </thead>
-        <tbody className='bg-[#E5F9EF]'>
+        <tbody>
           {leaveRequests.map((request) => (
             <tr key={request.id}>
-              <td className="border px-4 py-2">{request.employeeName}</td>
-              <td className="border px-4 py-2">{request.leaveDate}</td>
-              <td className="border px-4 py-2">{request.duration}</td>
-              <td className="border px-4 py-2">{request.reason}</td>
-              <td className="border px-4 py-2">
+              <td className="px-4 py-2">{request.employeeName}</td>
+              <td className="px-4 py-2">{request.leaveDate}</td>
+              <td className="px-4 py-2">{request.duration}</td>
+              <td className="px-4 py-2">{request.reason}</td>
+              <td className="px-4 py-2">
                 <select
                   value={request.status}
                   onChange={(e) => handleStatusChange(request.id, e.target.value)}
@@ -74,8 +73,6 @@ const LeaveRequest = () => {
         </tbody>
       </table>
     </div>
-    </body>
-
   );
 };
 

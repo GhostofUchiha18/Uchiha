@@ -8,6 +8,43 @@ const LoginPage = ({ onLogin }) => {
     e.preventDefault();
     onLogin(email, password);
   };
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const storedAuth = localStorage.getItem("isAuthenticated");
+    if (storedAuth === "true") {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = async (email, password) => {
+    try {
+      const payload = { email, password };
+      const response = await axios.post('http://localhost:8000/admin/login', payload);
+        console.log(response.data);
+  
+      if (response.data.success) {
+        setIsAuthenticated(true);
+        localStorage.setItem("isAuthenticated", "true");
+  
+        const token = response.data.token;
+        localStorage.setItem("accessToken", token);
+      } else {
+        alert("Invalid credentials!");
+      }
+    } catch (error) {
+      console.error("Error during login", error);
+      alert("Login failed. Please try again.");
+    }
+  };
+  
+  
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("isAuthenticated");
+  };
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center justify-center">
       <div className="flex flex-col items-center lg:items-start bg-white lg:p-16 top-0 left-0 h-screen bg-[url('./offi.webp')] bg-cover">

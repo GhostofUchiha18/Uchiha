@@ -1,50 +1,38 @@
-import React, { useState } from "react";
-import { NotepadText, UserCog, LogOut, ClipboardList } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
+import Cookies from "js-cookie";
 
-const Sidebar = ({ children, onLogout }) => {
+const Sidebar = ({ links }) => {
   const navigate = useNavigate();
-  const [activeIndex, setActiveIndex] = useState(0);
 
-  const menuItems = [
-    { name: "Attendance", path: "/attendance", icon: <NotepadText /> },
-    { name: "Users", path: "/users", icon: <UserCog /> },
-    { name: "Leave Requests", path: "/leave-requests", icon: <ClipboardList /> },
-    { name: "Logout", path: "/logout", icon: <LogOut /> },
-  ];
-
-  const handleNavigation = (item, index) => {
-    if (item.name === "Logout") {
-      onLogout(); 
-    } else {
-      navigate(item.path);
-      setActiveIndex(index);
-    }
+  const handleLogout = () => {
+    Cookies.remove("authToken");
+    navigate("/login");
   };
 
   return (
-    <div className="flex">
-      <div className="flex flex-col fixed top-0 left-0 h-screen w-64 bg-[#59C9A5] text-[#CAD4D0] font-semibold text-xl">
-        <img src="/digitalhorizon.png" alt="Logo" />
-        <nav>
-          <ul className="space-y-4">
-            {menuItems.map((item, index) => (
-              <li key={index}>
-                <button
-                  onClick={() => handleNavigation(item, index)}
-                  className={`flex items-center text-left p-2 border-none transition-colors duration-200 ${
-                    activeIndex === index ? "bg-[#F5FFFA] text-black w-full rounded-s-sm" : ""
-                  }`}
-                >
-                  {item.icon}
-                  <span className="ml-3">{item.name}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-      <div className="">{children}</div>
+    <div className="h-screen bg-gray-800 text-white">
+      <nav className="space-y-4 p-4">
+        {links.map((link) => (
+          <NavLink
+            key={link.name}
+            to={link.path}
+            className="block text-lg"
+            activeClassName="bg-gray-700"
+          >
+            {link.icon}
+            {link.name}
+          </NavLink>
+        ))}
+        <button
+          onClick={handleLogout}
+          className="flex items-center text-lg text-red-500 mt-4"
+        >
+          <LogOut className="mr-2" />
+          Logout
+        </button>
+      </nav>
     </div>
   );
 };

@@ -8,40 +8,7 @@ import LeaveRequest from "./components/LeaveRequest";
 import axios from "axios";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
-  useEffect(() => {
-    const storedAuth = localStorage.getItem("isAuthenticated");
-    if (storedAuth === "true") {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  const handleLogin = async (email, password) => {
-    try {
-      const payload = {
-        email,
-        password
-      };
-
-      const response = await axios.post('http://localhost:8000/admin/login', payload);
-
-      if (response.data.success) {
-        setIsAuthenticated(true);
-        localStorage.setItem("isAuthenticated", "true");
-      } else {
-        alert("Invalid credentials!");
-      }
-    } catch (error) {
-      console.error("Error during login", error);
-      alert("Login failed. Please try again.");
-    }
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("isAuthenticated");
-  };
+ 
 
   return (
     <Router>
