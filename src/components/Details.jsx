@@ -10,8 +10,8 @@ const Details = ({ employee }) => {
           <h3 className="text-lg font-semibold">Personal Information</h3>
           <p><b>Name:</b> {employee.name}</p>
           <p><b>Email:</b> {employee.email}</p>
-          <p><b>Phone:</b> {employee.phone}</p>
-          <p><b>Department:</b> {employee.department}</p>
+          <p><b>Phone:</b> {employee.phone_number}</p>
+          <p><b>Department:</b> {employee.department_id}</p>
         </div>
       </div>
     </div>

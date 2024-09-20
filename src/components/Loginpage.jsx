@@ -17,17 +17,16 @@ const LoginPage = ({ onLogin }) => {
 
   const handleLogin = async () => {
     try {
-      const payload = { email, password }; // Ensure payload is simple
+      const payload = { email, password }; 
       const response = await axios.post(
         "http://localhost:8000/admin/login",
         payload
       );
       console.log(response.data);
       if (response.data.access_token) {
-        // Corrected condition
         setIsAuthenticated(true);
         localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("accessToken", response.data.access_token); // Access token should be used
+        localStorage.setItem("accessToken", response.data.access_token);
         navigate("/attendance");
       } else {
         alert("Invalid credentials!");
@@ -85,7 +84,7 @@ const LoginPage = ({ onLogin }) => {
           </div>
 
           <button
-            type="submit" // Ensure button submits the form
+            type="submit"
             className="w-full py-2 px-4 bg-indigo-700 text-white rounded-md hover:bg-indigo-800 transition duration-300"
           >
             Log in

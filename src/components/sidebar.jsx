@@ -33,7 +33,7 @@ const Sidebar = ({ children, onLogout }) => {
                 <button
                   onClick={() => handleNavigation(item, index)}
                   className={`flex items-center text-left p-2 border-none transition-colors duration-200 ${
-                    activeIndex === index ? "bg-[#F5FFFA] text-black w-full rounded-s-sm" : ""
+                    activeIndex === index ? " text-black w-full rounded-s-sm" : ""
                   }`}
                 >
                   {item.icon}

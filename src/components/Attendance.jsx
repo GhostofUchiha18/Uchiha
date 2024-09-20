@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "./sidebar";
 
 function Attendance() {
   const [employees, setEmployees] = useState([]);
   const [attendanceData, setAttendanceData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/user');
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        const response = await axios.get('http://localhost:8000/user', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setEmployees(response.data.data);
         setAttendanceData(response.data.data.map(employee => ({
           employeeId: employee.id,
@@ -18,11 +29,16 @@ function Attendance() {
         })));
       } catch (error) {
         console.error("Error fetching employee data:", error);
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem("isAuthenticated");
+          localStorage.removeItem("accessToken");
+          navigate("/login");
+        }
       }
     };
 
     fetchEmployees();
-  }, []);
+  }, [navigate]);
 
   const handleInputChange = (index, field, value) => {
     const updatedData = [...attendanceData];
@@ -32,6 +48,12 @@ function Attendance() {
 
   const handleSubmit = async () => {
     try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
       const payload = {
         attendances: attendanceData.map(data => ({
           user_id: data.employeeId,
@@ -43,15 +65,24 @@ function Attendance() {
       };
 
       console.log('Submitting attendance data:', payload);
-      const response = await axios.post('http://localhost:8000/attendance', payload);
+      const response = await axios.post('http://localhost:8000/attendance', payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       console.log('Attendance data submitted:', response.data);
     } catch (error) {
       console.error('Error submitting attendance data:', error.response ? error.response.data : error.message);
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem("isAuthenticated");
+        localStorage.removeItem("accessToken");
+        navigate("/login");
+      }
     }
   };
 
+
   return (
-    <div className="bg-[#F5FFFA] p-8">
+    <Sidebar>
+    <div className="bg-[#F5FFFA] p-8 ml-64">
       <h1 className="text-3xl font-bold text-center text-[#02C46A]">Attendance List</h1>
       <div className="mt-8">
         <input type="date" className="border p-2 mb-4" />
@@ -107,6 +138,7 @@ function Attendance() {
         </button>
       </div>
     </div>
+    </Sidebar>
   );
 }
 
