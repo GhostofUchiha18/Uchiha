@@ -2,23 +2,30 @@ import React, { useState } from "react";
 import { NotepadText, UserCog, LogOut, ClipboardList } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const Sidebar = ({ children, onLogout }) => {
+const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const onLogout = () => {
+    localStorage.removeItem('authToken');
+    sessionStorage.clear();
+    console.log("User logged out successfully.");
+    setActiveIndex(-1); 
+  };
 
   const menuItems = [
     { name: "Attendance", path: "/attendance", icon: <NotepadText /> },
     { name: "Users", path: "/users", icon: <UserCog /> },
-    { name: "Leave Requests", path: "/leave-requests", icon: <ClipboardList /> },
-    { name: "Logout", path: "/logout", icon: <LogOut /> },
+    { name: "Logout", path: "/", icon: <LogOut /> },
   ];
 
   const handleNavigation = (item, index) => {
     if (item.name === "Logout") {
-      onLogout(); 
+      onLogout();
+      navigate("/"); 
     } else {
+      setActiveIndex(index); 
       navigate(item.path);
-      setActiveIndex(index);
     }
   };
 
@@ -32,8 +39,8 @@ const Sidebar = ({ children, onLogout }) => {
               <li key={index}>
                 <button
                   onClick={() => handleNavigation(item, index)}
-                  className={`flex items-center text-left p-2 border-none transition-colors duration-200 ${
-                    activeIndex === index ? " text-black w-full rounded-s-sm" : ""
+                  className={`flex items-center w-full text-left p-2 border-none transition-colors duration-200 ${
+                    activeIndex === index ? "text-black w-full rounded-s-sm" : "hover:text-black"
                   }`}
                 >
                   {item.icon}

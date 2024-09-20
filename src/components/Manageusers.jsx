@@ -3,7 +3,6 @@ import axios from "axios";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Details from "./Details";
-import Edit from "./Edit"; 
 import Sidebar from "./sidebar";
 
 function ManageUsers() {
@@ -79,6 +78,8 @@ function ManageUsers() {
         phone: updatedEmployee.phone_number,
         department: updatedEmployee.department_id,
         password: updatedEmployee.password,
+        role: updatedEmployee.role || 'user', 
+
       };
 
       const config = {
@@ -111,15 +112,15 @@ function ManageUsers() {
 
   const handleDelete = async (id) => {
     try {
-      const token = localStorage.getItem("accessToken"); // Retrieve token from localStorage
+      const token = localStorage.getItem("accessToken");
       if (!token) {
-        navigate("/login"); // Redirect to login if token is missing
+        navigate("/");
         return;
       }
 
       await axios.delete(`${baseURL}/user/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`, // Add Authorization header
+          Authorization: `Bearer ${token}`,
         },
       });
       setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== id));

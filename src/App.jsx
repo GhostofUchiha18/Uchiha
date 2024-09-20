@@ -5,11 +5,10 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import Sidebar from "./components/sidebar";
+
 import Attendance from "./components/Attendance";
 import Manageusers from "./components/Manageusers";
 import LoginPage from "./components/Loginpage";
-import LeaveRequest from "./components/LeaveRequest";
 
 const App = () => {
   return (
@@ -18,7 +17,7 @@ const App = () => {
         <Route path="/" element={<LoginPage />} />  
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/users" element={<Manageusers />} />
-        <Route path="/leave-requests" element={<LeaveRequest />} />
+        {/* <Route path="/leave-requests" element={<LeaveRequest />} /> */}
       </Routes>
     </Router>
   );

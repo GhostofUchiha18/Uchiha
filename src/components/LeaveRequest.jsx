@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from './sidebar';
 import { useNavigate } from 'react-router-dom';
+
 const LeaveRequest = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,26 +14,31 @@ const LeaveRequest = () => {
         const token = localStorage.getItem("accessToken");
         if (!token) {
           console.error("No access token found. Redirecting to login.");
-          navigate("/login");
+          navigate("/");
           return;
         }
 
         const response = await axios.get('http://localhost:8000/leave_request', {
-          headers: { Authorization: `Bearer ${token}` } // Include token in request headers
+          headers: { Authorization: `Bearer ${token}` }
         });
-        
-        // Assuming response.data is an array of LeaveRequestResponseDTO
-        setLeaveRequests(response.data);
+        console.log(response.data);
+        if (Array.isArray(response.data)) {
+          setLeaveRequests(response.data);
+        } else if (typeof response.data === 'object') {
+          setLeaveRequests(Object.values(response.data));
+        } else {
+          console.error("Unexpected data format:", response.data);
+          setLeaveRequests([]);
+        }
       } catch (error) {
         console.error("Error fetching leave requests:", error);
-        // You can handle specific error responses here if needed
       } finally {
-        setLoading(false); // Set loading to false regardless of success or failure
+        setLoading(false);
       }
     };
 
     fetchLeaveRequests();
-  }, [navigate]); // Add navigate as a dependency
+  }, [navigate]);
 
   const handleStatusChange = async (id, status) => {
     try {
@@ -58,40 +64,44 @@ const LeaveRequest = () => {
     <Sidebar>
       <div className="bg-[#F5FFFA] p-8 ml-64">
         <h1 className="text-3xl font-bold mb-6 text-[#02C46A]">Leave Requests</h1>
-        <table className="bg-[#E5F9EF] w-full">
-          <thead className="bg-[#02C46A]">
-            <tr>
-              <th className="px-4 py-2">User Name</th>
-              <th className="px-4 py-2">Leave Type</th>
-              <th className="px-4 py-2">Start Date</th>
-              <th className="px-4 py-2">End Date</th>
-              <th className="px-4 py-2">Reason</th>
-              <th className="px-4 py-2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaveRequests.map((request) => (
-              <tr key={request.id}>
-                <td className="px-4 py-2">{request.user_id}</td>
-                <td className="px-4 py-2">{request.leave_type}</td>
-                <td className="px-4 py-2">{request.start_date}</td>
-                <td className="px-4 py-2">{request.end_date}</td>
-                <td className="px-4 py-2">{request.reason}</td>
-                <td className="px-4 py-2">
-                  <select
-                    value={request.status}
-                    onChange={(e) => handleStatusChange(request.id, e.target.value)}
-                    className="p-2 border rounded"
-                  >
-                    <option value="PENDING">Pending</option>
-                    <option value="APPROVED">Approve</option>
-                    <option value="REJECTED">Reject</option>
-                  </select>
-                </td>
+        {leaveRequests.length > 0 ? (
+          <table className="bg-[#E5F9EF] w-full">
+            <thead className="bg-[#02C46A]">
+              <tr>
+                <th className="px-4 py-2">Employee Name</th>
+                <th className="px-4 py-2">Leave Type</th>
+                <th className="px-4 py-2">Start Date</th>
+                <th className="px-4 py-2">End Date</th>
+                <th className="px-4 py-2">Reason</th>
+                <th className="px-4 py-2">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {leaveRequests.map((request) => (
+                <tr key={request.id}>
+                  <td className="px-4 py-2">{request.user_id}</td>
+                  <td className="px-4 py-2">{request.leave_type}</td>
+                  <td className="px-4 py-2">{request.start_date}</td>
+                  <td className="px-4 py-2">{request.end_date}</td>
+                  <td className="px-4 py-2">{request.reason}</td>
+                  <td className="px-4 py-2">
+                    <select
+                      value={request.status}
+                      onChange={(e) => handleStatusChange(request.id, e.target.value)}
+                      className="p-2 border rounded"
+                    >
+                      <option value="PENDING">Pending</option>
+                      <option value="APPROVED">Approve</option>
+                      <option value="REJECTED">Reject</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No leave requests found.</p>
+        )}
       </div>
     </Sidebar>
   );

@@ -13,7 +13,7 @@ function Attendance() {
       try {
         const token = localStorage.getItem("accessToken");
         if (!token) {
-          navigate("/login");
+          navigate("/");
           return;
         }
 

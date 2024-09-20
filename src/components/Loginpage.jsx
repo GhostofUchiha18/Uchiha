@@ -37,20 +37,16 @@ const LoginPage = ({ onLogin }) => {
     }
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("isAuthenticated");
-  };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center justify-center">
-      <div className="flex flex-col items-center lg:items-start bg-white lg:p-16 top-0 left-0 h-screen bg-[url('./offi.webp')] bg-cover"></div>
+    <div className="min-h-screen grid lg:grid-cols-2 items-center justify-center">
+      <div className="flex flex-col items-center lg:items-start bg-white lg:p-0 top-0 left-0 h-screen bg-[url('./helatt.jpg')] bg-cover"></div>
 
-      <div className="flex flex-col w-full items-center justify-center bg-white p-8 lg:p-16 shadow ml-32 ">
-        <img src="digitalhorizon.png" className="h-40" />
+      <div className="flex flex-col w-full items-center justify-center bg-white p-8 lg:p-16 ">
+        <img src="digitalhorizon.png" className="h-64" />
 
         <form
-          className="space-y-4 w-full max-w-sm"
+          className="w-full max-w-sm"
           onSubmit={(e) => {
             e.preventDefault();
             handleLogin();
@@ -85,7 +81,7 @@ const LoginPage = ({ onLogin }) => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-700 text-white rounded-md hover:bg-indigo-800 transition duration-300"
+            className="w-full py-2 px-4 mt-3 bg-indigo-700 text-white rounded-md hover:bg-indigo-800 transition duration-300"
           >
             Log in
           </button>

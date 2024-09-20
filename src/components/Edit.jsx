@@ -6,8 +6,8 @@ const Edit = ({ employee, onSave }) => {
     email: employee.email,
     phone: employee.phone,
     department: employee.department,
-    password: employee.password || '',  // Ensure password is passed or has a default value
-    role: employee.role || 'user',  // Default role if not provided
+    password: employee.password || '1234',
+    role: employee.role || 'user', 
 });
 
   useEffect(() => {
