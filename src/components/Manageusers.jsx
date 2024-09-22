@@ -75,8 +75,6 @@ function ManageUsers() {
       const payload = {
         name: updatedEmployee.name,
         email: updatedEmployee.email,
-        phone: updatedEmployee.phone_number,
-        department: updatedEmployee.department_id,
         password: updatedEmployee.password,
         role: updatedEmployee.role || 'user', 
 
@@ -151,8 +149,6 @@ function ManageUsers() {
           <tr>
             <th className="px-4 py-2 w-64">Name</th>
             <th className="px-4 py-2">Email</th>
-            <th className="px-4 py-2">Phone</th>
-            <th className="px-4 py-2">Department</th>
             <th className="px-4 py-2">Actions</th>
           </tr>
         </thead>
@@ -161,8 +157,6 @@ function ManageUsers() {
             <tr key={employee.id}>
               <td className="px-4 py-2">{employee.name}</td>
               <td className="px-4 py-2">{employee.email}</td>
-              <td className="px-4 py-2">{employee.phone_number}</td>
-              <td className="px-4 py-2">{employee.department_id}</td>
               <td className="px-4 py-2 flex space-x-4">
                 {/* Details Button */}
                 <button
@@ -245,36 +239,6 @@ function ManageUsers() {
                         dialogType === "add"
                           ? setNewEmployee({ ...newEmployee, email: e.target.value })
                           : setSelectedEmployee({ ...selectedEmployee, email: e.target.value })
-                      }
-                      
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block mb-2">Phone</label>
-                    <input
-                      type="text"
-                      className="p-2 border w-full"
-                      value={selectedEmployee ? selectedEmployee.phone_number : newEmployee.phone_number}
-                      onChange={(e) =>
-                        dialogType === "add"
-                          ? setNewEmployee({ ...newEmployee, phone_number: e.target.value })
-                          : setSelectedEmployee({ ...selectedEmployee, phone_number: e.target.value })
-                      }
-                      
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block mb-2">Department</label>
-                    <input
-                      type="text"
-                      className="p-2 border w-full"
-                      value={selectedEmployee ? selectedEmployee.department_id : newEmployee.department_id}
-                      onChange={(e) =>
-                        dialogType === "add"
-                          ? setNewEmployee({ ...newEmployee, department_id: e.target.value })
-                          : setSelectedEmployee({ ...selectedEmployee, department_id: e.target.value })
                       }
                       
                     />
